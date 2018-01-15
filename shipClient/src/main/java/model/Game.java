@@ -48,26 +48,15 @@ public class Game {
 		myMap = new Map(State.EMPTY);
 		me = new Me(myMap);
 
-		XY xy1 = new XY(1, 1);
-		XY xy2 = new XY(1, 2);
-		XY xy3 = new XY(3, 3);
-		XY xy4 = new XY(4, 3);
-		XY xy5 = new XY(4, 6);
-		XY xy6 = new XY(5, 6);
-		XY xy7 = new XY(6, 6);
+		Ship[] drawedShips = me.drawShip();
 
-		Ship ship1 = new Ship(xy1, xy2);
-		Ship ship2 = new Ship(xy3, xy4);
-		Ship ship3 = new Ship(xy5, xy6, xy7);
-
-		myMap.setShip(ship1, 0, State.SHIP);
-		myMap.setShip(ship2, 1, State.SHIP);
-		myMap.setShip(ship3, 2, State.SHIP);
+		myMap.setShip(drawedShips[0], 0);
+		myMap.setShip(drawedShips[1], 1);
+		myMap.setShip(drawedShips[2], 2);
 
 		enemyMap = new Map(State.ENEMYEMPTY);
 		enemy = new Enemy(enemyMap);
 
-		enemy.drawShip();
 	}
 
 	// return fields which were hit by me and enemy,

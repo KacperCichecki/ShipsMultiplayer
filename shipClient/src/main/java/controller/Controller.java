@@ -21,9 +21,10 @@ import main.java.model.XY;
 
 public class Controller implements Initializable {
 
-	Game game = new Game();
-	Stage stage = null;
-	myPopup pop = null;
+    private Game game = new Game();
+
+    private Stage stage = null;
+    private myPopup pop = null;
 
 	@FXML
 	private ProgressBar progressBarMe, progressBarEnemy;
@@ -72,9 +73,26 @@ public class Controller implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		progressBarMe.setProgress(1);
 		progressBarEnemy.setProgress(1);
+        setUpMyFields();
 	}
 
-	public void restartGame() {
+    private void setUpMyFields() {
+
+        for (Field field :game.getMyMap().getFields()) {
+            XY xy = field.getXY();
+            int x = xy.getX();
+            int y = xy.getY();
+            String buttonNr = "" + x + y;
+            String state = field.getState().toString();
+            System.out.println(buttonNr + " state: " +state);
+            ObservableList<Node> buttons = myField.getChildren();
+            buttons.stream().filter(b -> b instanceof Button).filter(b -> ((Button) b).getText().endsWith(buttonNr))
+                    .forEach(b -> b.setId(state));
+// TODO: 15.01.18  
+        }
+    }
+
+    public void restartGame() {
 		game.startGame();
 		progressBarMe.setProgress(1);
 		progressBarEnemy.setProgress(1);

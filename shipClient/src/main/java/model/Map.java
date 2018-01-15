@@ -14,16 +14,16 @@ public class Map {
 	}
 
 	// change state of fields where given ship is located
-	public void setShip(Ship ship, int i, State state) {
+	public void setShip(Ship ship, int i) {
 		ships[i] = ship;
 		int length = ship.getHp();
 		if (length == 2) {
-			fields[ship.getXY(0).getY() * 8 + ship.getXY(0).getX()].setState(state);
-			fields[ship.getXY(1).getY() * 8 + ship.getXY(1).getX()].setState(state);
+			fields[ship.getXY(0).getY() * 8 + ship.getXY(0).getX()].setState(State.SHIP);
+			fields[ship.getXY(1).getY() * 8 + ship.getXY(1).getX()].setState(State.SHIP);
 		}else{
-			fields[ship.getXY(0).getY() * 8 + ship.getXY(0).getX()].setState(state);
-			fields[ship.getXY(1).getY() * 8 + ship.getXY(1).getX()].setState(state);
-			fields[ship.getXY(2).getY() * 8 + ship.getXY(2).getX()].setState(state);
+			fields[ship.getXY(0).getY() * 8 + ship.getXY(0).getX()].setState(State.SHIP);
+			fields[ship.getXY(1).getY() * 8 + ship.getXY(1).getX()].setState(State.SHIP);
+			fields[ship.getXY(2).getY() * 8 + ship.getXY(2).getX()].setState(State.SHIP);
 		}
 	}
 
@@ -33,8 +33,8 @@ public class Map {
 		return fields[y * 8 + x];
 	}
 
-	public Field getField(int x, int y) {
-		return fields[y * 8 + x];
+	public Field[] getFields() {
+		return fields;
 	}
 
 	public void setFieldState(XY xy, State state) {
