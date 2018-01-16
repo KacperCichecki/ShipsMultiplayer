@@ -10,17 +10,16 @@ import java.util.HashMap;
 
 public class ServerConnectionController {
 
-    static HashMap<Integer, Socket> playsersSockets = new HashMap<>();
+    private HashMap<Integer, Socket> playsersSockets = new HashMap<>();
+    private int numOfPlayers = 0;
 
-    public static void main(String[] args) throws Exception {
-        int numOfPlayers = 0;
-
+    public void start() throws IOException {
 
         ServerSocket serverSocket = new ServerSocket(Config.serverPort(), 100,
                 InetAddress.getByName(Config.serverHost()));
         System.out.println("Server started  at:  " + serverSocket);
 
-        while (true && numOfPlayers < 2) {
+        while (numOfPlayers < 2) {
             System.out.println("Waiting for a  connection...");
             final Socket activeSocket = serverSocket.accept();
             System.out.println("Received a  connection from  " + activeSocket);
@@ -31,7 +30,7 @@ public class ServerConnectionController {
         System.out.println("Both players are ready ");
     }
 
-    public static void handleClientRequest(Socket socket) {
+    private void handleClientRequest(Socket socket) {
         try{
             BufferedReader socketReader = new BufferedReader(new InputStreamReader(
                     socket.getInputStream()));
@@ -50,9 +49,12 @@ public class ServerConnectionController {
         }
     }
 
-    private static void sendToPlayer(String outMsg, int port) throws IOException {
+    private void sendToPlayer(String outMsg, int port) throws IOException {
 
-        Integer destinationPort = playsersSockets.keySet().stream().filter(integer -> integer != port).findFirst().get();
+        Integer destinationPort = playsersSockets.keySet()
+                .stream()
+                .filter(integer -> integer != port).findFirst()
+                .orElseThrow(() -> new IOException("can't find"));
         Socket socket = playsersSockets.get(destinationPort);
         BufferedWriter socketWriter = new BufferedWriter(new OutputStreamWriter(
         socket.getOutputStream()));
