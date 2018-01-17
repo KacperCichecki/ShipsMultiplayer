@@ -21,6 +21,7 @@ import main.java.model.XY;
 
 public class Controller implements Initializable {
 
+	// todo zapiąć locka na obiekcie game
     private Game game = new Game();
 
     private Stage stage = null;
@@ -78,7 +79,7 @@ public class Controller implements Initializable {
 
     private void setUpMyFields() {
 
-        for (Field field :game.getMyMap().getFields()) {
+        for (Field field : game.getMyMap().getFields()) {
             XY xy = field.getXY();
             int x = xy.getX();
             int y = xy.getY();
@@ -88,7 +89,6 @@ public class Controller implements Initializable {
             ObservableList<Node> buttons = myField.getChildren();
             buttons.stream().filter(b -> b instanceof Button).filter(b -> ((Button) b).getText().endsWith(buttonNr))
                     .forEach(b -> b.setId(state));
-// TODO: 15.01.18  
         }
     }
 
@@ -149,30 +149,13 @@ public class Controller implements Initializable {
 		int y = number % 10;
 		// first field is enemy's field and second is mine
 		Field[] fields = game.nextRound(new XY(x, y));
-		setEnemyField(fields[0]);
-		setMyField(fields[1]);
 
-	}
-
-	// set field which was hit by enemy
-	private void setMyField(Field field) {
-		if (field.getState() == State.HIT) {
-			int points = game.getEnemy().getPoints();
-			progressBarMe.setProgress((double) (7 - points) / 7);
-			if (points == 7) {
-				showAnnouncement("YOU LOST\n\n learn how to play!");
-			}
+		if(fields[0] != null){
+			setEnemyField(fields[0]);
+			setMyField(fields[1]);
+		}else{
+			System.out.println("Controller didn't set fields - game waiting for response");
 		}
-
-		XY xy = field.getXY();
-		int x = xy.getX();
-		int y = xy.getY();
-		String buttonNr = "" + x + y;
-		String state = field.getState().toString();
-
-		ObservableList<Node> buttons = myField.getChildren();
-		buttons.stream().filter(b -> b instanceof Button).filter(b -> ((Button) b).getText().endsWith(buttonNr))
-				.forEach(b -> b.setId(state));
 	}
 
 	// set enemy's field which was hit by me
@@ -197,6 +180,27 @@ public class Controller implements Initializable {
 					b.setId(state);
 					b.setDisable(true);
 				});
+	}
+
+	// set field which was hit by enemy
+	private void setMyField(Field field) {
+		if (field.getState() == State.HIT) {
+			int points = game.getEnemy().getPoints();
+			progressBarMe.setProgress((double) (7 - points) / 7);
+			if (points == 7) {
+				showAnnouncement("YOU LOST\n\n learn how to play!");
+			}
+		}
+
+		XY xy = field.getXY();
+		int x = xy.getX();
+		int y = xy.getY();
+		String buttonNr = "" + x + y;
+		String state = field.getState().toString();
+
+		ObservableList<Node> buttons = myField.getChildren();
+		buttons.stream().filter(b -> b instanceof Button).filter(b -> ((Button) b).getText().endsWith(buttonNr))
+				.forEach(b -> b.setId(state));
 	}
 
 	// show Pop up window with custom text

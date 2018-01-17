@@ -1,12 +1,14 @@
 package main.java.model;
 
-import main.java.controller.RequestController;
+import main.java.controller.CommunicationService;
+import main.java.controller.RequestServis;
 
 import java.util.Random;
 
 public class Me extends Player {
 
     private Random rand = null;
+    private CommunicationService communicationService = CommunicationService.INSTANCE;
 
 	public Me(Map map) {
 		super(map);
@@ -15,17 +17,13 @@ public class Me extends Player {
 
 	// hit enemy's field with given coordinates and
 	// return state of this field after hit
-	public Field hitEnemy(XY xy, Player enemy) {
-		Field enemyField = enemy.getMap().getField(xy);
+	public State hitEnemy(XY xy) {
+		State stateAfterHit = communicationService.hitAndReurnState(xy);
 
-        State stateAfterHit = RequestController.hitAndGettState(enemyField);
-        enemyField.setState(stateAfterHit);
-
-		if (stateAfterHit == State.HIT) {
+		if (stateAfterHit == State.ENEMYHIT) {
 			points++;
 		}
-
-		return enemyField;
+		return stateAfterHit;
 	}
 
 	// draw filed for ships and return these ships

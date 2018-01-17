@@ -6,6 +6,7 @@ public class Game {
 	private Enemy enemy;
 	private Map myMap;
 	private Map enemyMap;
+	private boolean waitingForResponse = false;
 
 	public Player getMe() {
 		return me;
@@ -62,23 +63,29 @@ public class Game {
 	// return fields which were hit by me and enemy,
 	//first field is enemy's field and second is mine
 	public Field[] nextRound(XY xy) {
+
 		Field[] fields = new Field[2];
 
-		fields[0] = me.hitEnemy(xy, enemy);
+		if(!waitingForResponse){
 
-		State afterMyShot = fields[0].getState();
+			//return enemy's field after my hit
+			State afterMyShot = me.hitEnemy(xy);
 
-		if (afterMyShot == State.ENEMYHIT) {
-			System.out.println("I have points: " + me.getPoints());
+			if (afterMyShot == State.ENEMYHIT) {
+				System.out.println("I have points: " + me.getPoints());
+			}
+
+			fields[0] = new Field(xy, afterMyShot);
+
+			fields[1] = enemy.hitMe(me);
+
+			State afterEnemyShot = fields[1].getState();
+
+			if (afterEnemyShot == State.HIT) {
+				System.out.println("Enemy have points: " + enemy.getPoints());
+			}
 		}
-
-		fields[1] = enemy.hitMe(me);
-
-		State afterEnemyShot = fields[1].getState();
-
-		if (afterEnemyShot == State.HIT) {
-			System.out.println("Enemy have points: " + enemy.getPoints());
-		}
+		System.out.println("Game didn't hit because waiting for response");
 		return fields;
 	}
 }

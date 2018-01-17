@@ -19,8 +19,7 @@ public class Enemy extends Player {
 		State state;
 
 		// hit only field that are EMPTY or SHIP (can't hit fields HIT or MISSED)
-		do {
-			x1 =  rand.nextInt(6)+1;
+		do { x1 =  rand.nextInt(6)+1;
 			y1 =  rand.nextInt(6)+1;
 			XY xy = new XY(x1, y1);
 			field = me.getMap().getField(xy);
