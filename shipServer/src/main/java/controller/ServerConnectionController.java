@@ -44,6 +44,7 @@ public class ServerConnectionController {
                 sendToPlayer(inMsg, socket.getPort());
             }
             socket.close();
+            System.out.println("Closed connection");
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -61,6 +62,6 @@ public class ServerConnectionController {
         socketWriter.write(outMsg);
         socketWriter.write("\n");
         socketWriter.flush();
-        System.out.println("wrote message to port: " + destinationPort);
+        System.out.println("wrote message : [" + outMsg + "]to socket: " + socket);
     }
 }
