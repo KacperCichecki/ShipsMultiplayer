@@ -10,14 +10,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
-public class myPopup {
+public class CustomPopup {
 
 	private Stage stage;
 	private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private int centerX = screenSize.width / 2;
 	private int centerY = screenSize.height / 2;
 
-	protected myPopup(Stage stage){
+	protected CustomPopup(Stage stage){
 		this.stage = stage;
 	}
 

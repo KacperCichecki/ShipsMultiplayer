@@ -73,7 +73,7 @@
 	-fx-text-fill:  #00ddbb;
 }
 
-.ship{
+#SHIP{
 	-fx-background-color: purple;
 	-fx-text-fill: purple;
 }

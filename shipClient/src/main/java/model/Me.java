@@ -1,7 +1,6 @@
 package main.java.model;
 
 import main.java.controller.CommunicationService;
-import main.java.controller.RequestServis;
 
 import java.util.Random;
 
@@ -18,7 +17,7 @@ public class Me extends Player {
 	// hit enemy's field with given coordinates and
 	// return state of this field after hit
 	public State hitEnemy(XY xy) {
-		State stateAfterHit = communicationService.hitAndReurnState(xy);
+		State stateAfterHit = communicationService.hitAndReturnState(xy);
 
 		if (stateAfterHit == State.ENEMYHIT) {
 			points++;
@@ -158,7 +157,6 @@ public class Me extends Player {
 			break;
 		}
 
-
 		ship1 = new Ship(xy1, xy2);
 		ship2 = new Ship(xy3, xy4);
 		ship3 = new Ship(xy5, xy6, xy7);
@@ -166,10 +164,6 @@ public class Me extends Player {
 		System.out.println(ship1);
 		System.out.println(ship2);
 		System.out.println(ship3);
-
-		map.setShip(ship1, 0);
-		map.setShip(ship2, 1);
-		map.setShip(ship3, 2);
 
 		return new Ship[] { ship1, ship2, ship3 };
 	}

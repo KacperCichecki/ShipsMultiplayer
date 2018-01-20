@@ -42,7 +42,6 @@ public class Config {
             databasePassword = properties.getProperty("database.password", "root");
             schemaName = properties.getProperty("database.name", "ships");
 
-
         } catch (IOException e) {
             LogManager.getLogger().error("Problem with loading propetties", e.getMessage());
         }
@@ -81,6 +80,4 @@ public class Config {
     public static String schemaNameName() {
         return instance.schemaName;
     }
-
-
 }

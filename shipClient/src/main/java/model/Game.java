@@ -1,5 +1,7 @@
 package main.java.model;
 
+import java.util.concurrent.*;
+
 public class Game {
 
 	private Me me;
@@ -57,35 +59,39 @@ public class Game {
 
 		enemyMap = new Map(State.ENEMYEMPTY);
 		enemy = new Enemy(enemyMap);
+	}
 
+	// get initial hit and send response
+	public Field listenForInitialRequest() {
+		return enemy.hitMeFirstTime(me);
 	}
 
 	// return fields which were hit by me and enemy,
 	//first field is enemy's field and second is mine
 	public Field[] nextRound(XY xy) {
 
+		enemy.setSentFirsRequest(true);
+
 		Field[] fields = new Field[2];
 
-		if(!waitingForResponse){
-
-			//return enemy's field after my hit
+		if (!waitingForResponse){
+            waitingForResponse = true;
+			//return enemy's field's state after my hit
 			State afterMyShot = me.hitEnemy(xy);
-
+			System.out.println("enemy's field after my shot: " + afterMyShot);
 			if (afterMyShot == State.ENEMYHIT) {
 				System.out.println("I have points: " + me.getPoints());
 			}
-
 			fields[0] = new Field(xy, afterMyShot);
 
-			fields[1] = enemy.hitMe(me);
-
-			State afterEnemyShot = fields[1].getState();
-
-			if (afterEnemyShot == State.HIT) {
-				System.out.println("Enemy have points: " + enemy.getPoints());
+			if(me.getPoints() < 7){
+				fields[1] = enemy.hitMe(me);
 			}
+
+            waitingForResponse = false;
+		} else {
+			System.out.println("Game didn't hit because waiting for response");
 		}
-		System.out.println("Game didn't hit because waiting for response");
 		return fields;
 	}
 }

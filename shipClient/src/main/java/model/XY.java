@@ -10,6 +10,15 @@ public class XY {
 		this.y = y;
 	}
 
+	public XY(String xy) {
+		if(xy.length() == 2){
+			this.x = Integer.parseInt(xy.substring(0, 1));
+			this.y = Integer.parseInt(xy.substring(1, 2));
+		}else {
+			throw new RuntimeException("Too many letters in string: " + xy);
+		}
+	}
+
 	public int getX() {
 		return x;
 	}
@@ -42,7 +51,4 @@ public class XY {
 		}
 		return true;
 	}
-
-
-
 }

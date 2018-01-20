@@ -20,7 +20,7 @@ public class Map {
 		if (length == 2) {
 			fields[ship.getXY(0).getY() * 8 + ship.getXY(0).getX()].setState(State.SHIP);
 			fields[ship.getXY(1).getY() * 8 + ship.getXY(1).getX()].setState(State.SHIP);
-		}else{
+		} else {
 			fields[ship.getXY(0).getY() * 8 + ship.getXY(0).getX()].setState(State.SHIP);
 			fields[ship.getXY(1).getY() * 8 + ship.getXY(1).getX()].setState(State.SHIP);
 			fields[ship.getXY(2).getY() * 8 + ship.getXY(2).getX()].setState(State.SHIP);

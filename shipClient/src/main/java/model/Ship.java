@@ -7,7 +7,6 @@ public class Ship {
 	private int hp = 0;
 	private XY[] xy;
 
-
 	public Ship(XY xy1, XY xy2) {
 		this.hp = 2;
 		xy = new XY[2];

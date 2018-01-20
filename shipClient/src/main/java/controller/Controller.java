@@ -25,7 +25,8 @@ public class Controller implements Initializable {
     private Game game = new Game();
 
     private Stage stage = null;
-    private myPopup pop = null;
+    private CustomPopup pop = null;
+    private Thread initialThread = null;
 
 	@FXML
 	private ProgressBar progressBarMe, progressBarEnemy;
@@ -75,6 +76,20 @@ public class Controller implements Initializable {
 		progressBarMe.setProgress(1);
 		progressBarEnemy.setProgress(1);
         setUpMyFields();
+
+		initialThread = new Thread(() -> {
+			Field field = game.listenForInitialRequest();
+			if (field != null){
+				setMyField(field);
+				System.out.println("end of initial thread, field set up");
+			} else {
+				System.out.println("end of initial thread, without setting field");
+			}
+
+		});
+		initialThread.setDaemon(true);
+		initialThread.start();
+
 	}
 
     private void setUpMyFields() {
@@ -85,7 +100,6 @@ public class Controller implements Initializable {
             int y = xy.getY();
             String buttonNr = "" + x + y;
             String state = field.getState().toString();
-            System.out.println(buttonNr + " state: " +state);
             ObservableList<Node> buttons = myField.getChildren();
             buttons.stream().filter(b -> b instanceof Button).filter(b -> ((Button) b).getText().endsWith(buttonNr))
                     .forEach(b -> b.setId(state));
@@ -120,7 +134,8 @@ public class Controller implements Initializable {
 			for (int x = 0; x < 8; x++) {
 				String xy = "" + x + y;
 				State state = game.getMyMap().getField(new XY(x, y)).getState();
-				buttons2.stream().filter(b -> ((Button) b).getText().endsWith(xy))
+				buttons2.stream()
+						.filter(b -> ((Button) b).getText().endsWith(xy))
 						.forEach(b -> b.setId(state.toString()));
 			}
 		}
@@ -133,7 +148,7 @@ public class Controller implements Initializable {
 			stage = (Stage) enemyField.getScene().getWindow();
 		}
 		if (pop == null) {
-			pop = new myPopup(stage);
+			pop = new CustomPopup(stage);
 		}
 
 		pop.showInfo();
@@ -143,6 +158,12 @@ public class Controller implements Initializable {
 	// results
 	@FXML
 	private void hitField(ActionEvent e) {
+
+		if (initialThread.isAlive()){
+			System.out.println("Controller: initialThread.isAlive()");
+			initialThread.interrupt();
+		}
+
 		Button button = (Button) e.getSource();
 		int number = Integer.parseInt(button.getText());
 		int x = number / 10;
@@ -160,7 +181,9 @@ public class Controller implements Initializable {
 
 	// set enemy's field which was hit by me
 	private void setEnemyField(Field field) {
-		if (field.getState() == State.ENEMYHIT) {
+
+		State state = field.getState();
+		if (state == State.ENEMYHIT) {
 			int points = game.getMe().getPoints();
 			progressBarEnemy.setProgress((double) (7 - points) / 7);
 			if (points == 7) {
@@ -172,35 +195,41 @@ public class Controller implements Initializable {
 		int x = xy.getX();
 		int y = xy.getY();
 		String buttonNr = "" + x + y;
-		String state = field.getState().toString();
 
 		ObservableList<Node> buttons = enemyField.getChildren();
-		buttons.stream().filter(b -> b instanceof Button).filter(b -> ((Button) b).getText().endsWith(buttonNr))
+		buttons.stream()
+				.filter(b -> b instanceof Button)
+				.filter(b -> ((Button) b).getText().endsWith(buttonNr))
 				.forEach(b -> {
-					b.setId(state);
+					b.setId(state.toString());
 					b.setDisable(true);
 				});
 	}
 
 	// set field which was hit by enemy
 	private void setMyField(Field field) {
-		if (field.getState() == State.HIT) {
-			int points = game.getEnemy().getPoints();
-			progressBarMe.setProgress((double) (7 - points) / 7);
-			if (points == 7) {
-				showAnnouncement("YOU LOST\n\n learn how to play!");
+
+		if (field != null) {
+			State state = field.getState();
+			if (state == State.HIT) {
+				int points = game.getEnemy().getPoints();
+				progressBarMe.setProgress((double) (7 - points) / 7);
 			}
+
+			XY xy = field.getXY();
+			int x = xy.getX();
+			int y = xy.getY();
+			String buttonNr = "" + x + y;
+
+			ObservableList<Node> buttons = myField.getChildren();
+			buttons.stream()
+					.filter(b -> b instanceof Button)
+					.filter(b -> ((Button) b).getText().endsWith(buttonNr))
+					.forEach(b -> b.setId(state.toString()));
+		} else if (game.getMe().getPoints() > 6) {
+			showAnnouncement("YOU WON\n\n Congratulation!");
 		}
 
-		XY xy = field.getXY();
-		int x = xy.getX();
-		int y = xy.getY();
-		String buttonNr = "" + x + y;
-		String state = field.getState().toString();
-
-		ObservableList<Node> buttons = myField.getChildren();
-		buttons.stream().filter(b -> b instanceof Button).filter(b -> ((Button) b).getText().endsWith(buttonNr))
-				.forEach(b -> b.setId(state));
 	}
 
 	// show Pop up window with custom text
@@ -209,7 +238,7 @@ public class Controller implements Initializable {
 			stage = (Stage) enemyField.getScene().getWindow();
 		}
 		if (pop == null) {
-			pop = new myPopup(stage);
+			pop = new CustomPopup(stage);
 		}
 		pop.showAnnouncement(message);
 
@@ -222,8 +251,8 @@ public class Controller implements Initializable {
 				String xy = "" + x + y;
 				State state = game.getEnemyMap().getField(new XY(x, y)).getState();
 				buttons.stream()
-				.filter(b -> ((Button) b).getText().endsWith(xy))
-				.forEach(b -> b.setDisable(true));
+						.filter(b -> ((Button) b).getText().endsWith(xy))
+						.forEach(b -> b.setDisable(true));
 			}
 		}
 
