@@ -1,8 +1,13 @@
-package main.java.model;
+package model;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.*;
 
 public class Game {
+
+	private static final Logger logger = LogManager.getLogger();
 
 	private Me me;
 	private Enemy enemy;
@@ -78,9 +83,9 @@ public class Game {
             waitingForResponse = true;
 			//return enemy's field's state after my hit
 			State afterMyShot = me.hitEnemy(xy);
-			System.out.println("enemy's field after my shot: " + afterMyShot);
+			logger.info("enemy's field after my shot: " + afterMyShot);
 			if (afterMyShot == State.ENEMYHIT) {
-				System.out.println("I have points: " + me.getPoints());
+				logger.info("I have points: " + me.getPoints());
 			}
 			fields[0] = new Field(xy, afterMyShot);
 
@@ -90,7 +95,7 @@ public class Game {
 
             waitingForResponse = false;
 		} else {
-			System.out.println("Game didn't hit because waiting for response");
+			logger.warn("Game didn't hit because waiting for response");
 		}
 		return fields;
 	}

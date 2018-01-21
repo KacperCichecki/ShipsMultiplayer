@@ -6,19 +6,19 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="380.0" prefWidth="535.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.Controller">
+<AnchorPane prefHeight="380.0" prefWidth="535.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
       <MenuBar id="myMenuBar" layoutY="2.0" minHeight="-Infinity" minWidth="-Infinity" prefWidth="535.0">
         <menus>
-          <Menu id="myMenu" mnemonicParsing="false" text="Game">
+          <Menu id="myMenu" mnemonicParsing="false" text="Gra">
             <items>
-              <MenuItem id="menuItem" mnemonicParsing="false" onAction="#restartGame" text="restart" />
+              <MenuItem id="menuItem" mnemonicParsing="false" onAction="#restartGame" text="jeszcze raz" />
                   <MenuItem id="menuItem" mnemonicParsing="false" onAction="#showGameInfo" text="info" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <Label alignment="CENTER" layoutX="34.0" layoutY="42.0" prefHeight="28.0" prefWidth="200.0" styleClass="myLabel" text="My ships" textAlignment="CENTER">
+      <Label alignment="CENTER" layoutX="34.0" layoutY="42.0" prefHeight="28.0" prefWidth="200.0" styleClass="myLabel" text="Moje statki" textAlignment="CENTER">
          <font>
             <Font size="20.0" />
          </font>
@@ -111,7 +111,7 @@
             <Button fx:id="button77" disable="true" layoutX="100.0" layoutY="190.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="77" GridPane.columnIndex="7" GridPane.rowIndex="7" />
          </children>
       </GridPane>
-      <Label alignment="CENTER" layoutX="301.0" layoutY="42.0" prefHeight="28.0" prefWidth="200.0" styleClass="myLabel" text="Enemy ships" textAlignment="CENTER">
+      <Label alignment="CENTER" layoutX="301.0" layoutY="42.0" prefHeight="28.0" prefWidth="200.0" styleClass="myLabel" text="Statki wroga" textAlignment="CENTER">
          <font>
             <Font size="20.0" />
          </font>

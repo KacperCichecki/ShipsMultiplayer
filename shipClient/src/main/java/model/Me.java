@@ -1,10 +1,14 @@
-package main.java.model;
+package model;
 
-import main.java.controller.CommunicationService;
+import controller.CommunicationService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Random;
 
 public class Me extends Player {
+
+	private static final Logger logger = LogManager.getLogger();
 
     private Random rand = null;
     private CommunicationService communicationService = CommunicationService.INSTANCE;
@@ -161,9 +165,9 @@ public class Me extends Player {
 		ship2 = new Ship(xy3, xy4);
 		ship3 = new Ship(xy5, xy6, xy7);
 
-		System.out.println(ship1);
-		System.out.println(ship2);
-		System.out.println(ship3);
+		logger.info(ship1);
+		logger.info(ship2);
+		logger.info(ship3);
 
 		return new Ship[] { ship1, ship2, ship3 };
 	}

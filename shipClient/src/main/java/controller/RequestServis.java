@@ -1,13 +1,17 @@
-package main.java.controller;
+package controller;
 
-import main.java.model.Field;
-import main.java.model.State;
+import model.Field;
+import model.State;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class RequestServis {
+
+    private static final Logger logger = LogManager.getLogger();
 
     private Socket socket;
     private BufferedReader socketReader;
@@ -21,15 +25,15 @@ public class RequestServis {
         socket = new Socket();
         //todo propertisy
         try {
-            socket.bind(new InetSocketAddress("localhost",  7777));
+            socket.bind(new InetSocketAddress("localhost",  8288));
             socket.connect(new InetSocketAddress("localhost",  2002));
             socketReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             socketWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("can't establish connection");
+            logger.error("can't establish connection");
         }
-        System.out.println("Started client  socket at " + socket.getLocalSocketAddress());
+        logger.info("Started client  socket at " + socket.getLocalSocketAddress());
     }
 
     public void sendText(String message) {
@@ -38,49 +42,48 @@ public class RequestServis {
             socketWriter.write(message);
             socketWriter.write("\n");
             socketWriter.flush();
-            System.out.println("Message sent: " + message);
+            logger.info("Message sent: " + message);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Can't write message");
+            logger.error("Can't write message" + message);
         }
     }
 
     public String getAnswer(){
         String response = null;
-        System.out.println("Start getting answer");
+        logger.info("Start getting answer");
         while (response == null || "".equals(response)) {
             try {
                 response = socketReader.readLine();
-
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Can't read message");
+                logger.error("Can't get answer");
             }
         }
-        System.out.println("Got answer: " + response);
+        logger.info("Got answer: " + response);
         return response;
     }
 
     public String getHitData(){
         String response = null;
-        System.out.println("Start getting info which field enemy is hitting");
+        logger.info("Start getting info which field enemy is hitting");
         while (response == null) {
             try {
                 response = socketReader.readLine();
 
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Can't read message");
+                logger.error("Can't read which field enemy is hitting");
             }
         }
-        System.out.println("Got hit data from enemy: " + response);
+        logger.info("Got hit data from enemy: " + response);
         return response;
     }
 
 
     public String getfirstResponse() throws InterruptedException {
 
-        System.out.println("Start getting first response");
+        logger.info("Start getting first response");
         StringBuilder result = new StringBuilder();
         boolean interrupted = false;
         int chr = -1;
@@ -90,20 +93,20 @@ public class RequestServis {
                     if (socketReader.ready()) chr = socketReader.read();
                     if (chr > -1) result.append((char) chr);
                     interrupted = Thread.interrupted(); // resets flag, call only once
-                    System.out.println("reading char: " + chr);
+                    //System.out.println("reading char: " + chr);
                     Thread.sleep(100);
                 } while (!interrupted && result.length() < 6);
 
                 if (interrupted) {
-                    System.out.println("initialThread interrupted");
+                    logger.warn("initialThread interrupted");
                     throw new InterruptedException("initialThread interrupted");
                 }
 
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Can't read message");
+                logger.error("Can't read message");
             }
-        System.out.println("returning result of first response: " + result.toString());
+        logger.info("returning result of first response: " + result.toString());
         return result.toString();
     }
 }

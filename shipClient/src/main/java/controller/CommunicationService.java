@@ -1,9 +1,13 @@
-package main.java.controller;
+package controller;
 
-import main.java.model.State;
-import main.java.model.XY;
+import model.State;
+import model.XY;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CommunicationService {
+    private static final Logger logger = LogManager.getLogger();
+
     RequestServis requestServis = RequestServis.INSTANCE;
 
     public final static CommunicationService INSTANCE = new CommunicationService();
@@ -25,7 +29,8 @@ public class CommunicationService {
         }else if ("miss".equals(answer)) {
             return State.MISSED;
         } else {
-            throw new RuntimeException("ERROR: got wrong anser, should be miss/hit and was: " + answer);
+            logger.error("got wrong anser, should be miss/hit and was: " + answer);
+            throw new RuntimeException("Got wrong anser, should be miss/hit and was: " + answer);
         }
     }
 
@@ -35,6 +40,7 @@ public class CommunicationService {
         if("hit".equals(response[0])) {
             return response[1];
         } else {
+            logger.error("Got wrong response, should be: hit, and is: " + response[0]);
             throw new RuntimeException("Got wrong response, should be: hit, and is: " + response[0]);
         }
     }
@@ -44,7 +50,7 @@ public class CommunicationService {
         try {
             response = requestServis.getfirstResponse().split(";");
         } catch (InterruptedException e) {
-            System.out.println("cought initial thread interruption exception");
+            logger.warn("cought initial thread interruption exception");
             return "";
         }
 

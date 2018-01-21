@@ -1,5 +1,6 @@
-package main.java.application;
+package application;
 
+import config.Messages;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -13,13 +14,14 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("../../resources/view.fxml"));
+			String fxml = Messages.getMessage("fxml");
+			Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("../../resources/application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getClassLoader().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("JAVA Ships");
 			primaryStage.setResizable(false);
-			primaryStage.getIcons().add(new Image(getClass().getResource("../../resources/ship.png").toString()));
+			primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResource("ship.png").toString()));
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

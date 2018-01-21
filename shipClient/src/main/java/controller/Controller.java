@@ -1,4 +1,4 @@
-package main.java.controller;
+package controller;
 
 import java.net.URL;
 import java.util.List;
@@ -14,12 +14,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import main.java.model.Field;
-import main.java.model.Game;
-import main.java.model.State;
-import main.java.model.XY;
+import model.Field;
+import model.Game;
+import model.State;
+import model.XY;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Controller implements Initializable {
+
+	private static final Logger logger = LogManager.getLogger();
 
 	// todo zapiąć locka na obiekcie game
     private Game game = new Game();
@@ -81,9 +85,9 @@ public class Controller implements Initializable {
 			Field field = game.listenForInitialRequest();
 			if (field != null){
 				setMyField(field);
-				System.out.println("end of initial thread, field set up");
+				logger.info("end of initial thread, field set up");
 			} else {
-				System.out.println("end of initial thread, without setting field");
+				logger.info("end of initial thread, without setting field");
 			}
 
 		});
@@ -160,7 +164,7 @@ public class Controller implements Initializable {
 	private void hitField(ActionEvent e) {
 
 		if (initialThread.isAlive()){
-			System.out.println("Controller: initialThread.isAlive()");
+			logger.info("Controller: initialThread.isAlive()");
 			initialThread.interrupt();
 		}
 
@@ -175,7 +179,7 @@ public class Controller implements Initializable {
 			setEnemyField(fields[0]);
 			setMyField(fields[1]);
 		}else{
-			System.out.println("Controller didn't set fields - game waiting for response");
+			logger.warn("Controller didn't set fields - game waiting for response");
 		}
 	}
 
@@ -214,6 +218,7 @@ public class Controller implements Initializable {
 			if (state == State.HIT) {
 				int points = game.getEnemy().getPoints();
 				progressBarMe.setProgress((double) (7 - points) / 7);
+
 			}
 
 			XY xy = field.getXY();
@@ -227,7 +232,7 @@ public class Controller implements Initializable {
 					.filter(b -> ((Button) b).getText().endsWith(buttonNr))
 					.forEach(b -> b.setId(state.toString()));
 		} else if (game.getMe().getPoints() > 6) {
-			showAnnouncement("YOU WON\n\n Congratulation!");
+			showAnnouncement("YOU LOST\n\n Learn how to play!");
 		}
 
 	}

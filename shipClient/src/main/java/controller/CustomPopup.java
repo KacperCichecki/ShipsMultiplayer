@@ -1,8 +1,9 @@
-package main.java.controller;
+package controller;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import config.Messages;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -57,12 +58,7 @@ public class CustomPopup {
 		hideButton.setId("okButton");
 		hideButton.setOnAction((a) -> popup.hide());
 
-		Label label = new Label("This is simple battle ships game.\n"
-				+ "This is game for one player who try to guess the\n"
-				+ "location of the opponent's ships.\n"
-				+ "Player take turns choosing field in an attempt to find\n"
-				+ "a square that contains an opponent's ship"
-				+ "\n\n All rights reserved \n Author:\n");
+		Label label = new Label(Messages.getMessage("program.info"));
 		label.setId("popLabe2");
 		VBox layout1 = new VBox();
 		layout1.setId("popup");
