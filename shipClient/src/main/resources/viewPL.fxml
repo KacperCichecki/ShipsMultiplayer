@@ -13,7 +13,8 @@
           <Menu id="myMenu" mnemonicParsing="false" text="Gra">
             <items>
               <MenuItem id="menuItem" mnemonicParsing="false" onAction="#restartGame" text="jeszcze raz" />
-                  <MenuItem id="menuItem" mnemonicParsing="false" onAction="#showGameInfo" text="info" />
+              <MenuItem id="menuItem" mnemonicParsing="false" onAction="#showGameInfo" text="info" />
+              <MenuItem id="menuItem" mnemonicParsing="false" onAction="#showGameStats" text="statystyki" />
             </items>
           </Menu>
         </menus>

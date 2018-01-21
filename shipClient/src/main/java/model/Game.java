@@ -79,24 +79,17 @@ public class Game {
 
 		Field[] fields = new Field[2];
 
-		if (!waitingForResponse){
-            waitingForResponse = true;
-			//return enemy's field's state after my hit
-			State afterMyShot = me.hitEnemy(xy);
-			logger.info("enemy's field after my shot: " + afterMyShot);
-			if (afterMyShot == State.ENEMYHIT) {
-				logger.info("I have points: " + me.getPoints());
-			}
-			fields[0] = new Field(xy, afterMyShot);
-
-			if(me.getPoints() < 7){
-				fields[1] = enemy.hitMe(me);
-			}
-
-            waitingForResponse = false;
-		} else {
-			logger.warn("Game didn't hit because waiting for response");
+		//return enemy's field's state after my hit
+		State afterMyShot = me.hitEnemy(xy);
+		logger.info("enemy's field after my shot: " + afterMyShot);
+		if (afterMyShot == State.ENEMYHIT) {
+			logger.info("I have points: " + me.getPoints());
 		}
+		fields[0] = new Field(xy, afterMyShot);
+		if (me.getPoints() < 7) {
+			fields[1] = enemy.hitMe(me);
+		}
+
 		return fields;
 	}
 }

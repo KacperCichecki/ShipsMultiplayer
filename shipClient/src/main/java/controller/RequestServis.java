@@ -25,7 +25,7 @@ public class RequestServis {
         socket = new Socket();
         //todo propertisy
         try {
-            socket.bind(new InetSocketAddress("localhost",  8288));
+            socket.bind(new InetSocketAddress("localhost",  7777));
             socket.connect(new InetSocketAddress("localhost",  2002));
             socketReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             socketWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));

@@ -20,6 +20,7 @@ import model.State;
 import model.XY;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import repository.DAO;
 
 public class Controller implements Initializable {
 
@@ -27,10 +28,11 @@ public class Controller implements Initializable {
 
 	// todo zapiąć locka na obiekcie game
     private Game game = new Game();
-
+	private DAO dao = DAO.getInstance();
     private Stage stage = null;
     private CustomPopup pop = null;
     private Thread initialThread = null;
+    private boolean hitThreadIsRunning = false;
 
 	@FXML
 	private ProgressBar progressBarMe, progressBarEnemy;
@@ -93,7 +95,6 @@ public class Controller implements Initializable {
 		});
 		initialThread.setDaemon(true);
 		initialThread.start();
-
 	}
 
     private void setUpMyFields() {
@@ -145,19 +146,6 @@ public class Controller implements Initializable {
 		}
 	}
 
-	// show program info
-	@FXML
-	private void showGameInfo() {
-		if (stage == null) {
-			stage = (Stage) enemyField.getScene().getWindow();
-		}
-		if (pop == null) {
-			pop = new CustomPopup(stage);
-		}
-
-		pop.showInfo();
-	}
-
 	// hit enemy's field with given number then set fields (enemy and my) with
 	// results
 	@FXML
@@ -168,18 +156,23 @@ public class Controller implements Initializable {
 			initialThread.interrupt();
 		}
 
-		Button button = (Button) e.getSource();
-		int number = Integer.parseInt(button.getText());
-		int x = number / 10;
-		int y = number % 10;
-		// first field is enemy's field and second is mine
-		Field[] fields = game.nextRound(new XY(x, y));
-
-		if(fields[0] != null){
-			setEnemyField(fields[0]);
-			setMyField(fields[1]);
-		}else{
-			logger.warn("Controller didn't set fields - game waiting for response");
+		if (!hitThreadIsRunning) {
+			new Thread(() -> {
+				hitThreadIsRunning = true;
+				logger.info("Starting new hitthread...");
+				Button button = (Button) e.getSource();
+				int number = Integer.parseInt(button.getText());
+				int x = number / 10;
+				int y = number % 10;
+				// first field is enemy's field and second is mine
+				Field[] fields = game.nextRound(new XY(x, y));
+				setEnemyField(fields[0]);
+				setMyField(fields[1]);
+				logger.info("... end of hitthread");
+				hitThreadIsRunning = false;
+			}).start();
+		} else {
+			logger.warn("New hitthread didn't start - waitinig for previous thread");
 		}
 	}
 
@@ -192,6 +185,7 @@ public class Controller implements Initializable {
 			progressBarEnemy.setProgress((double) (7 - points) / 7);
 			if (points == 7) {
 				showAnnouncement("YOU WON\n\n Congratulation!");
+				dao.saveResult("me", "enemy");
 			}
 		}
 
@@ -233,6 +227,7 @@ public class Controller implements Initializable {
 					.forEach(b -> b.setId(state.toString()));
 		} else if (game.getMe().getPoints() > 6) {
 			showAnnouncement("YOU LOST\n\n Learn how to play!");
+			dao.saveResult("enemy", "me");
 		}
 
 	}
@@ -260,6 +255,33 @@ public class Controller implements Initializable {
 						.forEach(b -> b.setDisable(true));
 			}
 		}
+
+	}
+
+	// show program info
+	@FXML
+	private void showGameInfo() {
+		if (stage == null) {
+			stage = (Stage) enemyField.getScene().getWindow();
+		}
+		if (pop == null) {
+			pop = new CustomPopup(stage);
+		}
+
+		pop.showInfo();
+	}
+
+	// show game statistics
+	@FXML
+	public void showGameStats(ActionEvent actionEvent) {
+		if (stage == null) {
+			stage = (Stage) enemyField.getScene().getWindow();
+		}
+		if (pop == null) {
+			pop = new CustomPopup(stage);
+		}
+
+		pop.showStatistics();
 
 	}
 }
