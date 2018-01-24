@@ -1,4 +1,4 @@
-package controller;
+package controller.services;
 
 import model.State;
 import model.XY;

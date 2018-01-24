@@ -255,7 +255,6 @@ public class Controller implements Initializable {
 						.forEach(b -> b.setDisable(true));
 			}
 		}
-
 	}
 
 	// show program info
@@ -284,4 +283,16 @@ public class Controller implements Initializable {
 		pop.showStatistics();
 
 	}
+
+	@FXML
+    public void showWeatherInfo(ActionEvent actionEvent) {
+		if (stage == null) {
+			stage = (Stage) enemyField.getScene().getWindow();
+		}
+		if (pop == null) {
+			pop = new CustomPopup(stage);
+		}
+
+		pop.showWeatherInfo();
+    }
 }

@@ -1,7 +1,5 @@
-package controller;
+package controller.services;
 
-import model.Field;
-import model.State;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,6 +1,6 @@
 package model;
 
-import controller.CommunicationService;
+import controller.services.CommunicationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
