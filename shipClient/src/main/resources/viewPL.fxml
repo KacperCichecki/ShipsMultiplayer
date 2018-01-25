@@ -15,7 +15,7 @@
               <MenuItem id="menuItem" mnemonicParsing="false" onAction="#restartGame" text="jeszcze raz" />
               <MenuItem id="menuItem" mnemonicParsing="false" onAction="#showGameInfo" text="info" />
               <MenuItem id="menuItem" mnemonicParsing="false" onAction="#showGameStats" text="statystyki" />
-               <MenuItem id="menuItem" mnemonicParsing="false" onAction="#showWeatherInfo" text="weather" />
+               <MenuItem id="menuItem" mnemonicParsing="false" onAction="#showWeatherInfo" text="pogoda" />
             </items>
           </Menu>
         </menus>

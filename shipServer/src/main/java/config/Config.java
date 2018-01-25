@@ -14,7 +14,6 @@ import java.util.Properties;
 public class Config {
 
     private final static String propFileName = "server.properties";
-    private static Config instance;
 
     private static String serverHost;
     private static int serverPort;
@@ -24,6 +23,9 @@ public class Config {
     private static String databaseLogin;
     private static String databasePassword;
     private static String schemaName;
+
+    private Config(){
+    }
 
     static {
         try {
@@ -36,48 +38,36 @@ public class Config {
             serverHost = properties.getProperty("server.host", "localhost");
             serverPort = Integer.parseInt(properties.getProperty("server.port", "2002"));
 
-            databaseHost = properties.getProperty("database.host", "localhost");
-            databasePort = Integer.parseInt(properties.getProperty("database.port", "3306"));
-            databaseLogin = properties.getProperty("database.login", "root");
-            databasePassword = properties.getProperty("database.password", "root");
-            schemaName = properties.getProperty("database.name", "ships");
-
         } catch (IOException e) {
             LogManager.getLogger().error("Problem with loading propetties", e.getMessage());
         }
     }
 
-    public static void load() {
-        if (instance == null){
-            instance = new Config();
-        }
-    }
-
     public static String serverHost() {
-        return instance.serverHost;
+        return serverHost;
     }
 
     public static int serverPort() {
-        return instance.serverPort;
+        return serverPort;
     }
 
     public static String databaseHost() {
-        return instance.databaseHost;
+        return databaseHost;
     }
 
     public static int databasePort() {
-        return instance.databasePort;
+        return databasePort;
     }
 
     public static String databaseLogin() {
-        return instance.databaseLogin;
+        return databaseLogin;
     }
 
     public static String databasePassword() {
-        return instance.databasePassword;
+        return databasePassword;
     }
 
     public static String schemaNameName() {
-        return instance.schemaName;
+        return schemaName;
     }
 }

@@ -1,5 +1,7 @@
 package controller.services;
 
+import config.Config;
+import exceptions.ServerComunicationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,10 +23,9 @@ public class RequestServis {
     private RequestServis() {
 
         socket = new Socket();
-        //todo propertisy
         try {
-            socket.bind(new InetSocketAddress("localhost",  7777));
-            socket.connect(new InetSocketAddress("localhost",  2002));
+            socket.bind(new InetSocketAddress(Config.clientHost(),  5555));
+            socket.connect(new InetSocketAddress(Config.serverHost(),  2002));
             socketReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             socketWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException e) {
@@ -57,6 +58,9 @@ public class RequestServis {
                 e.printStackTrace();
                 logger.error("Can't get answer");
             }
+        }
+        if(response.length() < 1){
+            throw new ServerComunicationException("too short response: " + response);
         }
         logger.info("Got answer: " + response);
         return response;

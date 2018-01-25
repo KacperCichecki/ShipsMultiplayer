@@ -1,6 +1,6 @@
 package config;
 
-import exceptions.ConfigLoadingException;
+import exceptions.ApiException;
 import java.io.File;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -49,10 +49,10 @@ public class DBConfig {
             JAXBContext jaxbContext = JAXBContext.newInstance(DBConfig.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             ClassLoader classLoader = DBConfig.class.getClassLoader();
-            File configFile = new File(classLoader.getResource("db_config.xml").getFile());
+            File configFile = new File(classLoader.getResource("config.xml").getFile());
             instance = unmarshaller.unmarshal(new StreamSource(configFile), DBConfig.class).getValue();
         } catch (Exception e) {
-            throw new ConfigLoadingException(e);
+            throw new ApiException(e);
         }
     }
 }

@@ -107,8 +107,7 @@ public class CustomPopup {
 	}
 
     public void showWeatherInfo() {
-		int winGamesAmount = dao.getUserWinSum("me");
-		int looseGameAmount = dao.getUserLooseSum("me");
+
 		final Popup popup = new Popup();
 		popup.setX(centerX - 200);
 		popup.setY(centerY - 250);
@@ -117,7 +116,8 @@ public class CustomPopup {
 		hideButton.setId("okButton");
 		hideButton.setOnAction((a) -> popup.hide());
 
-		Label label = new Label("Aktualna temperatura w Warszawie: " + new WeatherService().getWeatherInfo());
+		String text = Messages.getMessage("temperature");
+		Label label = new Label(text + new WeatherService().getWeatherInfo());
 		label.setId("popLabe2");
 		VBox layout1 = new VBox();
 		layout1.setId("popup");

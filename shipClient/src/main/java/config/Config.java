@@ -13,17 +13,17 @@ import java.util.Properties;
  */
 public class Config {
 
-    private final static String propFileName = "server.properties";
-    private static Config instance;
+    private final static String propFileName = "properties";
 
     private static String serverHost;
     private static int serverPort;
+    private static String clientHost;
+    private static int clientPort;
+    private static String path;
+    private static String apikey;
 
-    private static String databaseHost;
-    private static int databasePort;
-    private static String databaseLogin;
-    private static String databasePassword;
-    private static String schemaName;
+    private Config(){
+    }
 
     static {
         try {
@@ -36,48 +36,39 @@ public class Config {
             serverHost = properties.getProperty("server.host", "localhost");
             serverPort = Integer.parseInt(properties.getProperty("server.port", "2002"));
 
-            databaseHost = properties.getProperty("database.host", "localhost");
-            databasePort = Integer.parseInt(properties.getProperty("database.port", "3306"));
-            databaseLogin = properties.getProperty("database.login", "root");
-            databasePassword = properties.getProperty("database.password", "root");
-            schemaName = properties.getProperty("database.name", "ships");
+            clientHost = properties.getProperty("client.host", "localhost");
+            clientPort = Integer.parseInt(properties.getProperty("client.port", "5555"));
+
+            path = properties.getProperty("path");
+            apikey = properties.getProperty("apikey");
 
         } catch (IOException e) {
             LogManager.getLogger().error("Problem with loading propetties", e.getMessage());
         }
     }
 
-    public static void load() {
-        if (instance == null){
-            instance = new Config();
-        }
-    }
-
     public static String serverHost() {
-        return instance.serverHost;
+        return serverHost;
     }
 
     public static int serverPort() {
-        return instance.serverPort;
+        return serverPort;
     }
 
-    public static String databaseHost() {
-        return instance.databaseHost;
+    public static String clientHost() {
+        return clientHost;
     }
 
-    public static int databasePort() {
-        return instance.databasePort;
+    public static int clientPort() {
+        return clientPort;
     }
 
-    public static String databaseLogin() {
-        return instance.databaseLogin;
+    public static String serverPath() {
+        return path;
     }
 
-    public static String databasePassword() {
-        return instance.databasePassword;
+    public static String serverApiKey() {
+        return apikey;
     }
 
-    public static String schemaNameName() {
-        return instance.schemaName;
-    }
 }

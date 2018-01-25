@@ -1,5 +1,6 @@
 package controller.services;
 
+import exceptions.GameplayException;
 import model.State;
 import model.XY;
 import org.apache.logging.log4j.LogManager;
@@ -30,7 +31,7 @@ public class CommunicationService {
             return State.MISSED;
         } else {
             logger.error("got wrong anser, should be miss/hit and was: " + answer);
-            throw new RuntimeException("Got wrong anser, should be miss/hit and was: " + answer);
+            throw new GameplayException("Got wrong anser, should be miss/hit and was: " + answer);
         }
     }
 
@@ -41,7 +42,7 @@ public class CommunicationService {
             return response[1];
         } else {
             logger.error("Got wrong response, should be: hit, and is: " + response[0]);
-            throw new RuntimeException("Got wrong response, should be: hit, and is: " + response[0]);
+            throw new GameplayException("Got wrong response, should be: hit, and is: " + response[0]);
         }
     }
 
@@ -57,7 +58,7 @@ public class CommunicationService {
         if("hit".equals(response[0])) {
             return response[1];
         } else {
-            throw new RuntimeException("Got wrong response, should be: hit, and is: " + response[0]);
+            throw new GameplayException("Got wrong response, should be: hit, and is: " + response[0]);
         }
     }
 

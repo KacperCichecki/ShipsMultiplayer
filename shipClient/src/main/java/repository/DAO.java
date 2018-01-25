@@ -3,6 +3,8 @@ package repository;
 
 import config.Config;
 import config.DBConfig;
+import exceptions.DatabaseDataException;
+import exceptions.XmlConfigLoadingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,12 +16,17 @@ public class DAO {
     private static final Logger logger = LogManager.getLogger();
     DBConfig instance = DBConfig.instance;
     // data required for database connection
-    private String url = "jdbc:mysql://" + instance.databaseHost() + ":" + instance.databasePort() + "/ships";
+    private String host = instance.databaseHost();
+    private int port = instance.databasePort();
+    private String url = "jdbc:mysql://" + host + ":" + port + "/ships";
     private String user = instance.databaseLogin();
     private String password = instance.databasePassword();
     private static DAO dao = null;
 
     private DAO() {
+        if (url == null || user == null || password == null) {
+            throw new XmlConfigLoadingException("did'n load properly data from xml config");
+        }
     }
 
     // Singleton pattern for database connection
@@ -89,10 +96,14 @@ public class DAO {
             preparedStatementWinner.setString(1, winner);
             preparedStatementLooser.setString(1, looser);
 
-            preparedStatementWinner.executeUpdate();
-            preparedStatementLooser.executeUpdate();
+            int amount1 = preparedStatementWinner.executeUpdate();
+            int amount2 = preparedStatementLooser.executeUpdate();
             preparedStatementWinner.close();
             preparedStatementLooser.close();
+            int sum = amount1 + amount2;
+            if(sum != 2){
+                throw new DatabaseDataException("inserted wrong number of rows: " + sum);
+            }
 
         } catch (SQLException e) {
             logger.error("Error while saving results ", e);

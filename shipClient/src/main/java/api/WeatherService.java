@@ -1,5 +1,6 @@
 package api;
 
+import exceptions.ApiException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.BufferedReader;
@@ -14,9 +15,12 @@ public class WeatherService {
     public String getWeatherInfo() {
 
         StringBuilder sr = new StringBuilder();
+        String path = "http://dataservice.accuweather.com/currentconditions/v1/274663?apikey=";
+        String apikey = "CkIZWge3wGj07uOXiiAdl6fINA2CnCRR";
+        String address = path + apikey;
 
         try {
-            URL url = new URL("http://dataservice.accuweather.com/currentconditions/v1/274663?apikey=CkIZWge3wGj07uOXiiAdl6fINA2CnCRR");
+            URL url = new URL(address);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -38,6 +42,10 @@ public class WeatherService {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if(sr.length() < 1){
+            throw new ApiException("weather info too short: " + sr);
         }
 
         int start = sr.indexOf("Temperature") + 32;

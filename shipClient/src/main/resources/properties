@@ -1,0 +1,11 @@
+# server
+server.host = localhost
+server.port = 2002
+
+# client
+client.host = localhost
+client.port = 5555
+
+# API
+path = http://dataservice.accuweather.com/currentconditions/v1/274663?apikey=
+apikey = CkIZWge3wGj07uOXiiAdl6fINA2CnCRR
