@@ -21,11 +21,11 @@ public class RequestServis {
     public final static RequestServis INSTANCE = new RequestServis();
 
     private RequestServis() {
-
+        logger.info("Started initializing connection", getClass());
         socket = new Socket();
         try {
-            socket.bind(new InetSocketAddress(Config.clientHost(),  5555));
-            socket.connect(new InetSocketAddress(Config.serverHost(),  2002));
+            socket.bind(new InetSocketAddress(Config.clientHost(),  Config.clientPort()));
+            socket.connect(new InetSocketAddress(Config.serverHost(),  Config.serverPort()));
             socketReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             socketWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException e) {

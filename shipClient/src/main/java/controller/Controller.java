@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import model.Field;
@@ -26,7 +29,6 @@ public class Controller implements Initializable {
 
 	private static final Logger logger = LogManager.getLogger();
 
-	// todo zapiąć locka na obiekcie game
     private Game game = new Game();
 	private DAO dao = DAO.getInstance();
     private Stage stage = null;
@@ -41,41 +43,7 @@ public class Controller implements Initializable {
 	private GridPane enemyField;
 
 	@FXML
-	private Button eButton00, eButton10, eButton20, eButton30, eButton40, eButton50, eButton60, eButton70;
-	@FXML
-	private Button eButton01, eButton11, eButton21, eButton31, eButton41, eButton51, eButton61, eButton71;
-	@FXML
-	private Button eButton02, eButton12, eButton22, eButton32, eButton42, eButton52, eButton62, eButton72;
-	@FXML
-	private Button eButton03, eButton13, eButton23, eButton33, eButton43, eButton53, eButton63, eButton73;
-	@FXML
-	private Button eButton04, eButton14, eButton24, eButton34, eButton44, eButton54, eButton64, eButton74;
-	@FXML
-	private Button eButton05, eButton15, eButton25, eButton35, eButton45, eButton55, eButton65, eButton75;
-	@FXML
-	private Button eButton06, eButton16, eButton26, eButton36, eButton46, eButton56, eButton66, eButton76;
-	@FXML
-	private Button eButton07, eButton17, eButton27, eButton37, eButton47, eButton57, eButton67, eButton77;
-
-	@FXML
 	private GridPane myField;
-
-	@FXML
-	private Button button00, button10, button20, button30, button40, button50, button60, button70;
-	@FXML
-	private Button button01, button11, button21, button31, button41, button51, button61, button71;
-	@FXML
-	private Button button02, button12, button22, button32, button42, button52, button62, button72;
-	@FXML
-	private Button button03, button13, button23, button33, button43, button53, button63, button73;
-	@FXML
-	private Button button04, button14, button24, button34, button44, button54, button64, button74;
-	@FXML
-	private Button button05, button15, button25, button35, button45, button55, button65, button75;
-	@FXML
-	private Button button06, button16, button26, button36, button46, button56, button66, button76;
-	@FXML
-	private Button button07, button17, button27, button37, button47, button57, button67, button77;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -93,10 +61,14 @@ public class Controller implements Initializable {
 			}
 
 		});
+		//  żeby podczas wyłączenie okienka, wątek został ubity
 		initialThread.setDaemon(true);
 		initialThread.start();
 	}
 
+	// ustawiamy id każdego pola na mojej mapie: sprawdzam jaki stan ma to pole i
+	// ustawiam id tego buttona zgodne ze stanem
+	// (powoduje to zmianę koloru na taki, jaki jest zdefiniowany w arkuszu css)
     private void setUpMyFields() {
 
         for (Field field : game.getMyMap().getFields()) {
@@ -184,8 +156,10 @@ public class Controller implements Initializable {
 			int points = game.getMe().getPoints();
 			progressBarEnemy.setProgress((double) (7 - points) / 7);
 			if (points == 7) {
-				showAnnouncement("YOU WON\n\n Congratulation!");
-				dao.saveResult("me", "enemy");
+				Platform.runLater(() -> {
+					showAnnouncement("YOU WON\n\n Congratulation!");
+					dao.saveResult("me", "enemy");
+				});
 			}
 		}
 
@@ -226,8 +200,11 @@ public class Controller implements Initializable {
 					.filter(b -> ((Button) b).getText().endsWith(buttonNr))
 					.forEach(b -> b.setId(state.toString()));
 		} else if (game.getMe().getPoints() > 6) {
-			showAnnouncement("YOU LOST\n\n Learn how to play!");
-			dao.saveResult("enemy", "me");
+		// w javiefx trzeba użyć Platform.runLater kiedy wątek inny niż główny wątek aplikacji chce zmienić elementy graficzne
+			Platform.runLater(() -> {
+				showAnnouncement("YOU LOST\n\n Learn how to play!");
+				dao.saveResult("enemy", "me");
+			});
 		}
 
 	}
@@ -292,7 +269,17 @@ public class Controller implements Initializable {
 		if (pop == null) {
 			pop = new CustomPopup(stage);
 		}
-
 		pop.showWeatherInfo();
     }
+
+	@FXML
+	public void chooseTheme(ActionEvent actionEvent) {
+		if (stage == null) {
+			stage = (Stage) enemyField.getScene().getWindow();
+		}
+		RadioMenuItem radioMenuItem = (RadioMenuItem) actionEvent.getSource();
+		Scene scene = stage.getScene();
+		scene.getStylesheets().clear();
+		scene.getStylesheets().add(radioMenuItem.getText() + ".css");
+	}
 }

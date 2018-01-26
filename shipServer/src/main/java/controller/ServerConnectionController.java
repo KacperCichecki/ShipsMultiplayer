@@ -1,6 +1,8 @@
 package controller;
 
 import config.Config;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 
 public class ServerConnectionController {
 
+    private static final Logger logger = LogManager.getLogger();
     private HashMap<Integer, Socket> playersSockets = new HashMap<>();
     private int numOfPlayers = 0;
 
@@ -52,7 +55,10 @@ public class ServerConnectionController {
             socket.close();
             System.out.println("Closed connection");
         }catch(IOException e){
+            logger.warn(e.getMessage());
             e.printStackTrace();
+        }catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

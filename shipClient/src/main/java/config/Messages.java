@@ -11,7 +11,7 @@ public class Messages {
 
     private Messages() {
         // jeśli chcemy po polsku to trzeba to odkomentować:
-        Locale.setDefault(new Locale("pl", "PL"));
+        //Locale.setDefault(new Locale("pl", "PL"));
         resourceBundle = ResourceBundle.getBundle("messages", Locale.getDefault());
         // jeśli chcemy po angielsku to wystarczy to odkomentować i zakomentować to na górze
         //resourceBundle = ResourceBundle.getBundle("messages", Locale.US);

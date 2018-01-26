@@ -85,6 +85,7 @@ public class DAO {
     }
 
     public void saveResult(String winner, String looser) {
+        logger.info("saving results to db: winner - " + winner + "; looser - " + looser);
 
         try(Connection myCon = DriverManager.getConnection(url, user, password);
             PreparedStatement preparedStatementWinner =

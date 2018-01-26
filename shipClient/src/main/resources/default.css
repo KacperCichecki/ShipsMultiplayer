@@ -33,6 +33,18 @@
 }
 
 
+#RadioMenuItem{
+	-fx-background-color: #225e57;
+	-fx-font-size: 14px;
+	-fx-border-width: 0 0 1 0;
+  	-fx-border-color: white;
+}
+
+#RadioMenuItem:hover{
+	-fx-background-color: #32CD32;
+}
+
+
 #popup{
 	-fx-background-color: #F0FFFF;
 	-fx-border-color: grey;
