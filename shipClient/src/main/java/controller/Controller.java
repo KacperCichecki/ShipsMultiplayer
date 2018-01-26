@@ -10,8 +10,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import model.Field;
@@ -292,7 +294,17 @@ public class Controller implements Initializable {
 		if (pop == null) {
 			pop = new CustomPopup(stage);
 		}
-
 		pop.showWeatherInfo();
     }
+
+	@FXML
+	public void chooseTheme(ActionEvent actionEvent) {
+		if (stage == null) {
+			stage = (Stage) enemyField.getScene().getWindow();
+		}
+		RadioMenuItem radioMenuItem = (RadioMenuItem) actionEvent.getSource();
+		Scene scene = stage.getScene();
+		scene.getStylesheets().clear();
+		scene.getStylesheets().add(radioMenuItem.getText() + ".css");
+	}
 }

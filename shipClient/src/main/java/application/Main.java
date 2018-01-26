@@ -17,7 +17,7 @@ public class Main extends Application {
 			String fxml = Messages.getMessage("fxml");
 			Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(fxml));
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getClassLoader().getResource("application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getClassLoader().getResource("default.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("JAVA Ships");
 			primaryStage.setResizable(false);

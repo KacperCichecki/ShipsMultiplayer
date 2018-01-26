@@ -8,10 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ConfigTest {
 
-    @BeforeEach
-    void setUp() {
-        Config.load();
-    }
 
     @Test
     void getProperServerPort() {
