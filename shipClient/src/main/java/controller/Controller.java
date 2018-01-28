@@ -206,7 +206,8 @@ public class Controller implements Initializable {
 		// w javiefx trzeba użyć Platform.runLater kiedy wątek inny niż główny wątek aplikacji chce zmienić elementy graficzne
 			Platform.runLater(() -> {
 				showAnnouncement("YOU LOST\n\n Learn how to play!");
-				dao.saveResult("enemy", "me");
+				// trzeba to odkomentować, kiedy klient jest odpalany na dwóch komputerach
+				//dao.saveResult("enemy", "me");
 			});
 		}
 

@@ -1,5 +1,6 @@
 package api;
 
+import config.Config;
 import exceptions.ApiException;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -15,8 +16,8 @@ public class WeatherService {
     public String getWeatherInfo() {
 
         StringBuilder sr = new StringBuilder();
-        String path = "http://dataservice.accuweather.com/currentconditions/v1/274663?apikey=";
-        String apikey = "CkIZWge3wGj07uOXiiAdl6fINA2CnCRR";
+        String path = Config.ApiPath();
+        String apikey = Config.ApiApiKey();
         String address = path + apikey;
 
         try {

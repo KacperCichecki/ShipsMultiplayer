@@ -4,7 +4,7 @@ server.port = 2002
 
 # client
 client.host = localhost
-client.port = 5564
+client.port = 5566
 
 # API
 path = http://dataservice.accuweather.com/currentconditions/v1/274663?apikey=

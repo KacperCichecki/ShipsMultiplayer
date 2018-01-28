@@ -63,11 +63,11 @@ public class Config {
         return clientPort;
     }
 
-    public static String serverPath() {
+    public static String ApiPath() {
         return path;
     }
 
-    public static String serverApiKey() {
+    public static String ApiApiKey() {
         return apikey;
     }
 
