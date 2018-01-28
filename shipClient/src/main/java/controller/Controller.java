@@ -129,6 +129,7 @@ public class Controller implements Initializable {
 		}
 
 		if (!hitThreadIsRunning) {
+			Thread hitThread =
 			new Thread(() -> {
 				hitThreadIsRunning = true;
 				logger.info("Starting new hitthread...");
@@ -142,7 +143,9 @@ public class Controller implements Initializable {
 				setMyField(fields[1]);
 				logger.info("... end of hitthread");
 				hitThreadIsRunning = false;
-			}).start();
+			});
+			hitThread.setDaemon(true);
+			hitThread.start();
 		} else {
 			logger.warn("New hitthread didn't start - waitinig for previous thread");
 		}

@@ -55,8 +55,7 @@ public class ServerConnectionController {
             socket.close();
             System.out.println("Closed connection");
         }catch(IOException e){
-            logger.warn(e.getMessage());
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -67,7 +66,7 @@ public class ServerConnectionController {
         Integer destinationPort = playersSockets.keySet()
                 .stream()
                 .filter(integer -> integer != port).findFirst()
-                .orElseThrow(() -> new IOException("can't find"));
+                .orElseThrow(() -> new IOException("Can't find other socket. Enemy didn't connect"));
 
         Socket socket = playersSockets.get(destinationPort);
         // obiekt do pisania do socketu
